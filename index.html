@@ -28,14 +28,17 @@
       margin: 2rem 0;
     }
     .hidden { display: none; }
-    label, input, select, button { display: block; width: 100%; }
-    input, select { margin-bottom: 1rem; }
-    input, select, button {
-      padding: 0.5rem; border-radius: 0.5rem; border: none;
-    }
+    label, input, button { display: block; width: 100%; }
+    input { margin-bottom: 1rem; }
+    input, button { border: none; }
     button {
-      background: #0056b3; color: white; cursor: pointer;
-      transition: background 0.3s ease;
+      background: #0056b3;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-size: 1.05rem;              /* Larger buttons */
+      padding: 0.75rem 1.2rem;          /* Larger buttons */
+      border-radius: 0.65rem;           /* Larger buttons */
     }
     button:hover { background: #003d80; }
     .quiz-option {
@@ -57,12 +60,45 @@
       gap: 0.25rem;
       padding-left: 0.5rem;
     }
-    .legend { font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem; }
-    .results-card {
+    .card {
       background: rgba(255,255,255,0.2);
       border-radius: 0.5rem;
       padding: 0.75rem;
       margin-bottom: 0.75rem;
+    }
+    .styles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    .style-chip {
+      background: rgba(0,0,0,0.2);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    }
+    .nav-row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+    .nav-row button { width: auto; }
+    .topbar {
+      display: flex; flex-direction: column; gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .progress-label { display: flex; justify-content: space-between; align-items: center; }
+    .progressbar {
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progressfill {
+      height: 100%;
+      width: 0%;
+      background: #0056b3;
+      transition: width 0.25s ease;
+    }
+    .legend {
+      font-size: 0.9rem; opacity: 0.9; margin: 0 0 0.5rem 0;
     }
     .scores {
       display: grid;
@@ -73,12 +109,10 @@
     .score-pill {
       background: rgba(0,0,0,0.2);
       border-radius: 999px;
-      padding: 0.4rem 0.75rem;
+      padding: 0.5rem 0.9rem;
       text-align: center;
       font-weight: bold;
     }
-    .rank-list { margin: 0.5rem 0 1rem; padding-left: 1.25rem; }
-    .footer-actions { display: flex; gap: 0.5rem; }
   </style>
 </head>
 <body>
@@ -89,14 +123,46 @@
     <h1 id="form-title">Change Leadership Style – Self-Assessment</h1>
   </div>
 
-  <!-- QUIZ -->
+  <div class="topbar">
+    <div class="progress-label">
+      <div id="step-label">Step 1 of 5</div>
+      <!-- legend removed from here (only on question pages) -->
+    </div>
+    <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress">
+      <div id="progress-fill" class="progressfill"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: INTRO -->
+  <section id="page-intro">
+    <div class="card">
+      <h2 style="margin-top:0">About this quiz</h2>
+      <p>This quick self-assessment helps you understand which change leadership style you use most. No pass or fail — it’s for reflection and better teamwork.</p>
+      <div class="styles-grid">
+        <div class="style-chip"><strong>Visionary 🔭</strong><br/>Inspires with a clear future vision.</div>
+        <div class="style-chip"><strong>Organiser 📋</strong><br/>Brings structure, clarity and process.</div>
+        <div class="style-chip"><strong>Motivator 🔥</strong><br/>Builds enthusiasm and momentum.</div>
+        <div class="style-chip"><strong>Stabiliser ⚖️</strong><br/>Provides calm, continuity and reassurance.</div>
+      </div>
+      <h3 style="margin-bottom:.25rem">How it works</h3>
+      <ul style="margin-top:.25rem">
+        <li>20 statements, rated from 1 to 5.</li>
+        <li>Each section has 5 questions (Q1–5, Q6–10, Q11–15, Q16–20).</li>
+        <li>Each style totals up to 25 points. Results rank your styles and show strengths/blind spots.</li>
+      </ul>
+      <p style="margin:0"><em>Privacy:</em> Runs entirely in your browser. No data is sent or stored.</p>
+    </div>
+    <div class="nav-row">
+      <button type="button" id="start-btn">Start</button>
+    </div>
+  </section>
+
+  <!-- FORM -->
   <form id="quiz-form">
-    <p class="legend">Rate each statement from <strong>1</strong> (rarely true for me) to <strong>5</strong> (very true for me).</p>
+    <!-- PAGE: SECTION 1 (Q1–5) -->
+    <section id="page-sec1" class="hidden">
+      <div class="legend">1 = rarely true · 5 = very true</div>
 
-    <!-- Questions 1–20 -->
-    <div id="questions">
-
-      <!-- Q1 -->
       <div class="question-block">
         <div class="question-title">1. I often paint a picture of the future to inspire others.</div>
         <div class="options-row">
@@ -108,7 +174,6 @@
         </div>
       </div>
 
-      <!-- Q2 -->
       <div class="question-block">
         <div class="question-title">2. I see possibilities and opportunities, even in uncertainty.</div>
         <div class="options-row">
@@ -120,7 +185,6 @@
         </div>
       </div>
 
-      <!-- Q3 -->
       <div class="question-block">
         <div class="question-title">3. I encourage my team to think big and embrace change.</div>
         <div class="options-row">
@@ -132,7 +196,6 @@
         </div>
       </div>
 
-      <!-- Q4 -->
       <div class="question-block">
         <div class="question-title">4. I communicate the ‘why’ behind change clearly.</div>
         <div class="options-row">
@@ -144,7 +207,6 @@
         </div>
       </div>
 
-      <!-- Q5 -->
       <div class="question-block">
         <div class="question-title">5. I focus on long-term goals, even when short-term is tough.</div>
         <div class="options-row">
@@ -156,7 +218,16 @@
         </div>
       </div>
 
-      <!-- Q6 -->
+      <div class="nav-row">
+        <button type="button" id="sec1-back">Back</button>
+        <button type="button" id="sec1-next">Next</button>
+      </div>
+    </section>
+
+    <!-- PAGE: SECTION 2 (Q6–10) -->
+    <section id="page-sec2" class="hidden">
+      <div class="legend">1 = rarely true · 5 = very true</div>
+
       <div class="question-block">
         <div class="question-title">6. I make detailed plans to ensure change is implemented smoothly.</div>
         <div class="options-row">
@@ -168,7 +239,6 @@
         </div>
       </div>
 
-      <!-- Q7 -->
       <div class="question-block">
         <div class="question-title">7. I clarify roles and responsibilities during change.</div>
         <div class="options-row">
@@ -180,7 +250,6 @@
         </div>
       </div>
 
-      <!-- Q8 -->
       <div class="question-block">
         <div class="question-title">8. I like to use systems and processes to manage uncertainty.</div>
         <div class="options-row">
@@ -192,7 +261,6 @@
         </div>
       </div>
 
-      <!-- Q9 -->
       <div class="question-block">
         <div class="question-title">9. I ensure details are well thought through before action.</div>
         <div class="options-row">
@@ -204,7 +272,6 @@
         </div>
       </div>
 
-      <!-- Q10 -->
       <div class="question-block">
         <div class="question-title">10. I feel more comfortable when there is structure and order.</div>
         <div class="options-row">
@@ -216,7 +283,16 @@
         </div>
       </div>
 
-      <!-- Q11 -->
+      <div class="nav-row">
+        <button type="button" id="sec2-back">Back</button>
+        <button type="button" id="sec2-next">Next</button>
+      </div>
+    </section>
+
+    <!-- PAGE: SECTION 3 (Q11–15) -->
+    <section id="page-sec3" class="hidden">
+      <div class="legend">1 = rarely true · 5 = very true</div>
+
       <div class="question-block">
         <div class="question-title">11. I energise people around me to get on board with change.</div>
         <div class="options-row">
@@ -228,7 +304,6 @@
         </div>
       </div>
 
-      <!-- Q12 -->
       <div class="question-block">
         <div class="question-title">12. I acknowledge and celebrate progress, even small wins.</div>
         <div class="options-row">
@@ -240,7 +315,6 @@
         </div>
       </div>
 
-      <!-- Q13 -->
       <div class="question-block">
         <div class="question-title">13. I focus on building enthusiasm and momentum in the team.</div>
         <div class="options-row">
@@ -252,7 +326,6 @@
         </div>
       </div>
 
-      <!-- Q14 -->
       <div class="question-block">
         <div class="question-title">14. I support people emotionally when change feels tough.</div>
         <div class="options-row">
@@ -264,7 +337,6 @@
         </div>
       </div>
 
-      <!-- Q15 -->
       <div class="question-block">
         <div class="question-title">15. I encourage collaboration and collective ownership of change.</div>
         <div class="options-row">
@@ -276,7 +348,16 @@
         </div>
       </div>
 
-      <!-- Q16 -->
+      <div class="nav-row">
+        <button type="button" id="sec3-back">Back</button>
+        <button type="button" id="sec3-next">Next</button>
+      </div>
+    </section>
+
+    <!-- PAGE: SECTION 4 (Q16–20) -->
+    <section id="page-sec4" class="hidden">
+      <div class="legend">1 = rarely true · 5 = very true</div>
+
       <div class="question-block">
         <div class="question-title">16. I help my team stay grounded during change.</div>
         <div class="options-row">
@@ -288,7 +369,6 @@
         </div>
       </div>
 
-      <!-- Q17 -->
       <div class="question-block">
         <div class="question-title">17. I preserve what works well while introducing change.</div>
         <div class="options-row">
@@ -300,7 +380,6 @@
         </div>
       </div>
 
-      <!-- Q18 -->
       <div class="question-block">
         <div class="question-title">18. I reassure staff by providing consistency and continuity.</div>
         <div class="options-row">
@@ -312,7 +391,6 @@
         </div>
       </div>
 
-      <!-- Q19 -->
       <div class="question-block">
         <div class="question-title">19. I prioritise minimising disruption where possible.</div>
         <div class="options-row">
@@ -324,7 +402,6 @@
         </div>
       </div>
 
-      <!-- Q20 -->
       <div class="question-block">
         <div class="question-title">20. I support my team by being calm and steady under pressure.</div>
         <div class="options-row">
@@ -336,63 +413,85 @@
         </div>
       </div>
 
-    </div>
-
-    <button type="submit">Submit</button>
+      <div class="nav-row">
+        <button type="button" id="sec4-back">Back</button>
+        <button type="button" id="see-results">See results</button>
+      </div>
+    </section>
   </form>
 
-  <!-- RESULTS -->
-  <div id="results" class="hidden">
+  <!-- PAGE: RESULTS -->
+  <section id="page-results" class="hidden">
     <h1>Results</h1>
     <div class="scores" id="score-pills"></div>
-    <p><strong>Order of your styles (highest to lowest):</strong></p>
-    <ol class="rank-list" id="ranking-list"></ol>
+
+    <!-- Ranking list removed to avoid repetition -->
 
     <div id="style-cards"></div>
 
-    <div class="footer-actions">
-      <button type="button" onclick="resetQuiz()">Retake</button>
+    <div class="card" id="apply-prompts">
+      <h3 style="margin-top:0">Apply your style</h3>
+      <ul style="margin-top:.25rem">
+        <li><strong>Change Resistance:</strong> Use your strengths to build buy-in while avoiding blind spots.</li>
+        <li><strong>Peer-to-Leader:</strong> Adapt to establish credibility and trust with former peers.</li>
+        <li><strong>Delegation & Trust:</strong> Build ownership; notice where your style helps or hinders.</li>
+        <li><strong>Culture & Morale:</strong> Sustain energy and momentum during constant change.</li>
+      </ul>
     </div>
-  </div>
+
+    <div class="nav-row">
+      <button type="button" id="retake-btn">Retake</button>
+    </div>
+  </section>
 </div>
 
 <script>
-  // Style definitions (names + icons + copy)
+  // Pages
+  const PAGES = ['intro','sec1','sec2','sec3','sec4','results'];
+  let current = 0; // index into PAGES
+
+  // Styles and ranges
   const STYLES = [
-    {
-      key: 'visionary', name: 'Visionary', icon: '🔭',
-      range: [1,2,3,4,5],
-      strengths: 'Inspires with a clear future vision; sees opportunities; energises people to aim higher.',
-      blind: 'May overlook practicalities; risks losing people who prefer detail and clarity.'
-    },
-    {
-      key: 'organiser', name: 'Organiser', icon: '📋',
-      range: [6,7,8,9,10],
-      strengths: 'Brings structure, clarity and process; ensures change is practical and sustainable.',
-      blind: 'May get bogged down in detail; can be seen as rigid or resistant to ambiguity.'
-    },
-    {
-      key: 'motivator', name: 'Motivator', icon: '🔥',
-      range: [11,12,13,14,15],
-      strengths: 'Builds enthusiasm; encourages collaboration; celebrates progress; supports morale.',
-      blind: 'May prioritise energy over substance; risk burnout if the pace is too fast.'
-    },
-    {
-      key: 'stabiliser', name: 'Stabiliser', icon: '⚖️',
-      range: [16,17,18,19,20],
-      strengths: 'Provides calm, continuity and reassurance; helps teams feel safe during change.',
-      blind: 'May cling too tightly to the past; risk slowing progress or avoiding bold steps.'
-    }
+    { key:'visionary', name:'Visionary', icon:'🔭', range:[1,2,3,4,5],
+      strengths:'Inspires with a clear future vision; sees opportunities; energises people to aim higher.',
+      blind:'May overlook practicalities; risks losing people who prefer detail and clarity.' },
+    { key:'organiser', name:'Organiser', icon:'📋', range:[6,7,8,9,10],
+      strengths:'Brings structure, clarity and process; ensures change is practical and sustainable.',
+      blind:'May get bogged down in detail; can be seen as rigid or resistant to ambiguity.' },
+    { key:'motivator', name:'Motivator', icon:'🔥', range:[11,12,13,14,15],
+      strengths:'Builds enthusiasm; encourages collaboration; celebrates progress; supports morale.',
+      blind:'May prioritise energy over substance; risk burnout if the pace is too fast.' },
+    { key:'stabiliser', name:'Stabiliser', icon:'⚖️', range:[16,17,18,19,20],
+      strengths:'Provides calm, continuity and reassurance; helps teams feel safe during change.',
+      blind:'May cling too tightly to the past; risk slowing progress or avoiding bold steps.' }
   ];
 
-  function ensureAllAnswered() {
-    for (let i = 1; i <= 20; i++) {
-      if (!document.querySelector(`input[name="q${i}"]:checked`)) {
-        alert(`Please answer question ${i} before submitting.`);
-        return false;
-      }
+  // Helpers
+  function showPage(index) {
+    PAGES.forEach(p => document.getElementById(`page-${p}`)?.classList.add('hidden'));
+    document.getElementById(`page-${PAGES[index]}`)?.classList.remove('hidden');
+    current = index;
+
+    const stepLabel = document.getElementById('step-label');
+    const fill = document.getElementById('progress-fill');
+    const bar = document.querySelector('.progressbar');
+
+    if (PAGES[index] === 'results') {
+      stepLabel.textContent = 'Results';
+      // Show full bar on results
+      fill.style.width = '100%';
+      bar.setAttribute('aria-valuenow', '100');
+    } else {
+      // Steps: Intro + 4 sections = 5 steps (index 0..4)
+      const denominator = 4; // sections count
+      const clampedIndex = Math.min(index, 4);
+      const pct = Math.round((clampedIndex / denominator) * 100); // 0,25,50,75,100
+      stepLabel.textContent = `Step ${index + 1} of 5`;
+      fill.style.width = pct + '%';
+      bar.setAttribute('aria-valuenow', String(pct));
     }
-    return true;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function getAnswerValue(q) {
@@ -400,64 +499,88 @@
     return el ? parseInt(el.value, 10) : 0;
   }
 
+  function ensureRangeAnswered(start, end) {
+    for (let i = start; i <= end; i++) {
+      if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+        alert(`Please answer question ${i} before continuing.`);
+        return false;
+      }
+    }
+    return true;
+  }
+
   function sumForRange(range) {
     return range.reduce((acc, qn) => acc + getAnswerValue(qn), 0);
   }
 
   function calculateScores() {
-    return STYLES.map(s => ({ key: s.key, name: s.name, icon: s.icon, score: sumForRange(s.range) }));
+    return STYLES.map(s => ({
+      key: s.key, name: s.name, icon: s.icon,
+      score: sumForRange(s.range)
+    }));
   }
 
   function renderScorePills(scores) {
     const pills = document.getElementById('score-pills');
-    pills.innerHTML = scores.map(s => (
+    pills.innerHTML = scores.map(s =>
       `<div class="score-pill">${s.name} ${s.icon}: ${s.score}/25</div>`
-    )).join('');
-  }
-
-  function renderRanking(sorted) {
-    const list = document.getElementById('ranking-list');
-    list.innerHTML = sorted.map(s => `<li><strong>${s.name} ${s.icon}</strong> — ${s.score}/25</li>`).join('');
+    ).join('');
   }
 
   function renderStyleCards(sorted) {
     const cards = document.getElementById('style-cards');
-    const copyByKey = Object.fromEntries(STYLES.map(s => [s.key, s]));
+    const byKey = Object.fromEntries(STYLES.map(s => [s.key, s]));
     cards.innerHTML = sorted.map(s => {
-      const c = copyByKey[s.key];
+      const c = byKey[s.key];
       return `
-        <div class="results-card">
+        <div class="card">
           <h3 style="margin:0 0 .25rem 0">${s.name} ${s.icon}</h3>
           <p style="margin:.25rem 0"><strong>Strengths:</strong> ${c.strengths}</p>
           <p style="margin:.25rem 0"><strong>Blind Spots:</strong> ${c.blind}</p>
-        </div>
-      `;
+        </div>`;
     }).join('');
   }
 
-  function showResults(scores) {
-    const sorted = scores.sort((a,b) => b.score - a.score);
-    renderScorePills(scores);
-    renderRanking(sorted);
-    renderStyleCards(sorted);
-    document.getElementById('quiz-form').classList.add('hidden');
-    document.getElementById('results').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function resetQuiz() {
-    document.getElementById('quiz-form').reset();
-    document.getElementById('results').classList.add('hidden');
-    document.getElementById('quiz-form').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  document.getElementById('quiz-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (!ensureAllAnswered()) return;
+  function showResults() {
     const scores = calculateScores();
-    showResults(scores);
+    const sorted = scores.slice().sort((a,b) => b.score - a.score);
+    renderScorePills(scores);
+    renderStyleCards(sorted);
+    showPage(5); // results
+  }
+
+  function resetAll() {
+    document.getElementById('quiz-form').reset();
+    showPage(0); // intro
+  }
+
+  // Navigation
+  document.getElementById('start-btn').addEventListener('click', () => showPage(1));
+
+  document.getElementById('sec1-back').addEventListener('click', () => showPage(0));
+  document.getElementById('sec1-next').addEventListener('click', () => {
+    if (ensureRangeAnswered(1,5)) showPage(2);
   });
+
+  document.getElementById('sec2-back').addEventListener('click', () => showPage(1));
+  document.getElementById('sec2-next').addEventListener('click', () => {
+    if (ensureRangeAnswered(6,10)) showPage(3);
+  });
+
+  document.getElementById('sec3-back').addEventListener('click', () => showPage(2));
+  document.getElementById('sec3-next').addEventListener('click', () => {
+    if (ensureRangeAnswered(11,15)) showPage(4);
+  });
+
+  document.getElementById('sec4-back').addEventListener('click', () => showPage(3));
+  document.getElementById('see-results').addEventListener('click', () => {
+    if (ensureRangeAnswered(16,20)) showResults();
+  });
+
+  document.getElementById('retake-btn').addEventListener('click', resetAll);
+
+  // Init
+  showPage(0);
 </script>
 
 </body>
