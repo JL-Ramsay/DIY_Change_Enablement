@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Change Leadership Style – Self-Assessment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      background-color: #0d3050;
+      color: white;
+      line-height: 1.5;
+    }
+    .form-container {
+      width: 90%;
+      max-width: 50rem;
+      background: #0194d3;
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.2);
+      margin: 2rem 0;
+    }
+    .hidden { display: none; }
+    label, input, select, button { display: block; width: 100%; }
+    input, select { margin-bottom: 1rem; }
+    input, select, button {
+      padding: 0.5rem; border-radius: 0.5rem; border: none;
+    }
+    button {
+      background: #0056b3; color: white; cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover { background: #003d80; }
+    .quiz-option {
+      display: flex; align-items: center; margin-left: 20px;
+    }
+    .quiz-option input {
+      width: auto; margin-right: 0.5rem; margin-bottom: 0; vertical-align: middle;
+    }
+    .quiz-option label { vertical-align: middle; display: inline-block; }
+    .header {
+      display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
+    }
+    .header img { max-height: 4rem; margin-right: 1rem; }
+    .question-block { margin-bottom: 1rem; }
+    .question-title { font-weight: bold; margin-bottom: 0.25rem; }
+    .options-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.25rem;
+      padding-left: 0.5rem;
+    }
+    .legend { font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem; }
+    .results-card {
+      background: rgba(255,255,255,0.2);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .scores {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .score-pill {
+      background: rgba(0,0,0,0.2);
+      border-radius: 999px;
+      padding: 0.4rem 0.75rem;
+      text-align: center;
+      font-weight: bold;
+    }
+    .rank-list { margin: 0.5rem 0 1rem; padding-left: 1.25rem; }
+    .footer-actions { display: flex; gap: 0.5rem; }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <div class="header">
+    <img src="images/logo.png" alt="Ramsay Health Care Logo">
+    <h1 id="form-title">Change Leadership Style – Self-Assessment</h1>
+  </div>
+
+  <!-- QUIZ -->
+  <form id="quiz-form">
+    <p class="legend">Rate each statement from <strong>1</strong> (rarely true for me) to <strong>5</strong> (very true for me).</p>
+
+    <!-- Questions 1–20 -->
+    <div id="questions">
+
+      <!-- Q1 -->
+      <div class="question-block">
+        <div class="question-title">1. I often paint a picture of the future to inspire others.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q1" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q1" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q1" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q1" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q1" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="question-block">
+        <div class="question-title">2. I see possibilities and opportunities, even in uncertainty.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q2" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q2" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q2" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q2" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q2" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="question-block">
+        <div class="question-title">3. I encourage my team to think big and embrace change.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q3" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q3" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q3" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q3" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q3" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="question-block">
+        <div class="question-title">4. I communicate the ‘why’ behind change clearly.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q4" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q4" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q4" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q4" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q4" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="question-block">
+        <div class="question-title">5. I focus on long-term goals, even when short-term is tough.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q5" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q5" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q5" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q5" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q5" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="question-block">
+        <div class="question-title">6. I make detailed plans to ensure change is implemented smoothly.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q6" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q6" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q6" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q6" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q6" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="question-block">
+        <div class="question-title">7. I clarify roles and responsibilities during change.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q7" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q7" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q7" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q7" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q7" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="question-block">
+        <div class="question-title">8. I like to use systems and processes to manage uncertainty.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q8" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q8" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q8" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q8" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q8" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="question-block">
+        <div class="question-title">9. I ensure details are well thought through before action.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q9" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q9" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q9" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q9" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q9" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="question-block">
+        <div class="question-title">10. I feel more comfortable when there is structure and order.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q10" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q10" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q10" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q10" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q10" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="question-block">
+        <div class="question-title">11. I energise people around me to get on board with change.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q11" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q11" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q11" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q11" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q11" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="question-block">
+        <div class="question-title">12. I acknowledge and celebrate progress, even small wins.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q12" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q12" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q12" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q12" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q12" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q13 -->
+      <div class="question-block">
+        <div class="question-title">13. I focus on building enthusiasm and momentum in the team.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q13" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q13" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q13" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q13" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q13" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q14 -->
+      <div class="question-block">
+        <div class="question-title">14. I support people emotionally when change feels tough.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q14" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q14" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q14" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q14" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q14" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q15 -->
+      <div class="question-block">
+        <div class="question-title">15. I encourage collaboration and collective ownership of change.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q15" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q15" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q15" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q15" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q15" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q16 -->
+      <div class="question-block">
+        <div class="question-title">16. I help my team stay grounded during change.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q16" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q16" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q16" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q16" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q16" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q17 -->
+      <div class="question-block">
+        <div class="question-title">17. I preserve what works well while introducing change.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q17" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q17" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q17" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q17" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q17" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q18 -->
+      <div class="question-block">
+        <div class="question-title">18. I reassure staff by providing consistency and continuity.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q18" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q18" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q18" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q18" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q18" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q19 -->
+      <div class="question-block">
+        <div class="question-title">19. I prioritise minimising disruption where possible.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q19" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q19" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q19" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q19" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q19" value="5">5</label>
+        </div>
+      </div>
+
+      <!-- Q20 -->
+      <div class="question-block">
+        <div class="question-title">20. I support my team by being calm and steady under pressure.</div>
+        <div class="options-row">
+          <label class="quiz-option"><input type="radio" name="q20" value="1">1</label>
+          <label class="quiz-option"><input type="radio" name="q20" value="2">2</label>
+          <label class="quiz-option"><input type="radio" name="q20" value="3">3</label>
+          <label class="quiz-option"><input type="radio" name="q20" value="4">4</label>
+          <label class="quiz-option"><input type="radio" name="q20" value="5">5</label>
+        </div>
+      </div>
+
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- RESULTS -->
+  <div id="results" class="hidden">
+    <h1>Results</h1>
+    <div class="scores" id="score-pills"></div>
+    <p><strong>Order of your styles (highest to lowest):</strong></p>
+    <ol class="rank-list" id="ranking-list"></ol>
+
+    <div id="style-cards"></div>
+
+    <div class="footer-actions">
+      <button type="button" onclick="resetQuiz()">Retake</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Style definitions (names + icons + copy)
+  const STYLES = [
+    {
+      key: 'visionary', name: 'Visionary', icon: '🔭',
+      range: [1,2,3,4,5],
+      strengths: 'Inspires with a clear future vision; sees opportunities; energises people to aim higher.',
+      blind: 'May overlook practicalities; risks losing people who prefer detail and clarity.'
+    },
+    {
+      key: 'organiser', name: 'Organiser', icon: '📋',
+      range: [6,7,8,9,10],
+      strengths: 'Brings structure, clarity and process; ensures change is practical and sustainable.',
+      blind: 'May get bogged down in detail; can be seen as rigid or resistant to ambiguity.'
+    },
+    {
+      key: 'motivator', name: 'Motivator', icon: '🔥',
+      range: [11,12,13,14,15],
+      strengths: 'Builds enthusiasm; encourages collaboration; celebrates progress; supports morale.',
+      blind: 'May prioritise energy over substance; risk burnout if the pace is too fast.'
+    },
+    {
+      key: 'stabiliser', name: 'Stabiliser', icon: '⚖️',
+      range: [16,17,18,19,20],
+      strengths: 'Provides calm, continuity and reassurance; helps teams feel safe during change.',
+      blind: 'May cling too tightly to the past; risk slowing progress or avoiding bold steps.'
+    }
+  ];
+
+  function ensureAllAnswered() {
+    for (let i = 1; i <= 20; i++) {
+      if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+        alert(`Please answer question ${i} before submitting.`);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function getAnswerValue(q) {
+    const el = document.querySelector(`input[name="q${q}"]:checked`);
+    return el ? parseInt(el.value, 10) : 0;
+  }
+
+  function sumForRange(range) {
+    return range.reduce((acc, qn) => acc + getAnswerValue(qn), 0);
+  }
+
+  function calculateScores() {
+    return STYLES.map(s => ({ key: s.key, name: s.name, icon: s.icon, score: sumForRange(s.range) }));
+  }
+
+  function renderScorePills(scores) {
+    const pills = document.getElementById('score-pills');
+    pills.innerHTML = scores.map(s => (
+      `<div class="score-pill">${s.name} ${s.icon}: ${s.score}/25</div>`
+    )).join('');
+  }
+
+  function renderRanking(sorted) {
+    const list = document.getElementById('ranking-list');
+    list.innerHTML = sorted.map(s => `<li><strong>${s.name} ${s.icon}</strong> — ${s.score}/25</li>`).join('');
+  }
+
+  function renderStyleCards(sorted) {
+    const cards = document.getElementById('style-cards');
+    const copyByKey = Object.fromEntries(STYLES.map(s => [s.key, s]));
+    cards.innerHTML = sorted.map(s => {
+      const c = copyByKey[s.key];
+      return `
+        <div class="results-card">
+          <h3 style="margin:0 0 .25rem 0">${s.name} ${s.icon}</h3>
+          <p style="margin:.25rem 0"><strong>Strengths:</strong> ${c.strengths}</p>
+          <p style="margin:.25rem 0"><strong>Blind Spots:</strong> ${c.blind}</p>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function showResults(scores) {
+    const sorted = scores.sort((a,b) => b.score - a.score);
+    renderScorePills(scores);
+    renderRanking(sorted);
+    renderStyleCards(sorted);
+    document.getElementById('quiz-form').classList.add('hidden');
+    document.getElementById('results').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetQuiz() {
+    document.getElementById('quiz-form').reset();
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('quiz-form').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!ensureAllAnswered()) return;
+    const scores = calculateScores();
+    showResults(scores);
+  });
+</script>
+
+</body>
+</html>
