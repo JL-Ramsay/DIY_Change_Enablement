@@ -36,9 +36,9 @@
       color: white;
       cursor: pointer;
       transition: background 0.2s ease;
-      font-size: 1.05rem;              /* Larger buttons */
-      padding: 0.75rem 1.2rem;          /* Larger buttons */
-      border-radius: 0.65rem;           /* Larger buttons */
+      font-size: 1.05rem;
+      padding: 0.75rem 1.2rem;
+      border-radius: 0.65rem;
     }
     button:hover { background: #003d80; }
     .quiz-option {
@@ -113,6 +113,25 @@
       text-align: center;
       font-weight: bold;
     }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 600px) {
+      .split { grid-template-columns: 1fr; }
+    }
+    .split .col {
+      background: rgba(0,0,0,0.2);
+      border-radius: 0.5rem;
+      padding: 0.6rem;
+    }
+    .apply-block {
+      background: rgba(0,0,0,0.2);
+      border-radius: 0.5rem;
+      padding: 0.6rem;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -126,7 +145,6 @@
   <div class="topbar">
     <div class="progress-label">
       <div id="step-label">Step 1 of 5</div>
-      <!-- legend removed from here (only on question pages) -->
     </div>
     <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress">
       <div id="progress-fill" class="progressfill"></div>
@@ -138,7 +156,8 @@
     <div class="card">
       <h2 style="margin-top:0">About this quiz</h2>
       <p>This short self-assessment will help you identify the leadership style you most often use. For each statement, consider how frequently and consistently it reflects the way you show up at work. There are no right or wrong answers.</p>
-     
+      
+    </div>
     <div class="nav-row">
       <button type="button" id="start-btn">Start</button>
     </div>
@@ -146,7 +165,7 @@
 
   <!-- FORM -->
   <form id="quiz-form">
-    <!-- PAGE: SECTION 1 (Q1–5) -->
+    <!-- SECTION 1 (Q1–5) -->
     <section id="page-sec1" class="hidden">
       <div class="legend">1 = rarely true · 5 = very true</div>
 
@@ -211,7 +230,7 @@
       </div>
     </section>
 
-    <!-- PAGE: SECTION 2 (Q6–10) -->
+    <!-- SECTION 2 (Q6–10) -->
     <section id="page-sec2" class="hidden">
       <div class="legend">1 = rarely true · 5 = very true</div>
 
@@ -276,7 +295,7 @@
       </div>
     </section>
 
-    <!-- PAGE: SECTION 3 (Q11–15) -->
+    <!-- SECTION 3 (Q11–15) -->
     <section id="page-sec3" class="hidden">
       <div class="legend">1 = rarely true · 5 = very true</div>
 
@@ -341,7 +360,7 @@
       </div>
     </section>
 
-    <!-- PAGE: SECTION 4 (Q16–20) -->
+    <!-- SECTION 4 (Q16–20) -->
     <section id="page-sec4" class="hidden">
       <div class="legend">1 = rarely true · 5 = very true</div>
 
@@ -410,21 +429,12 @@
   <!-- PAGE: RESULTS -->
   <section id="page-results" class="hidden">
     <h1>Results</h1>
+    <p>Below results shows the highest style match.</p>
     <div class="scores" id="score-pills"></div>
-
-    <!-- Ranking list removed to avoid repetition -->
 
     <div id="style-cards"></div>
 
-    <div class="card" id="apply-prompts">
-      <h3 style="margin-top:0">Apply your style</h3>
-      <ul style="margin-top:.25rem">
-        <li><strong>Change Resistance:</strong> Use your strengths to build buy-in while avoiding blind spots.</li>
-        <li><strong>Peer-to-Leader:</strong> Adapt to establish credibility and trust with former peers.</li>
-        <li><strong>Delegation & Trust:</strong> Build ownership; notice where your style helps or hinders.</li>
-        <li><strong>Culture & Morale:</strong> Sustain energy and momentum during constant change.</li>
-      </ul>
-    </div>
+    <div class="card" id="apply-section" class="hidden"></div>
 
     <div class="nav-row">
       <button type="button" id="retake-btn">Retake</button>
@@ -435,25 +445,60 @@
 <script>
   // Pages
   const PAGES = ['intro','sec1','sec2','sec3','sec4','results'];
-  let current = 0; // index into PAGES
+  let current = 0;
 
-  // Styles and ranges
+  // Score threshold: show styles strictly greater than 15/25
+  const SHOW_THRESHOLD = 14;
+
+  // Styles and ranges (plus style-specific guidance)
   const STYLES = [
-    { key:'visionary', name:'Visionary', icon:'🔭', range:[1,2,3,4,5],
+    {
+      key:'visionary', name:'Visionary', icon:'🔭', range:[1,2,3,4,5],
       strengths:'Inspires with a clear future vision; sees opportunities; energises people to aim higher.',
-      blind:'May overlook practicalities; risks losing people who prefer detail and clarity.' },
-    { key:'organiser', name:'Organiser', icon:'📋', range:[6,7,8,9,10],
+      blind:'May overlook practicalities; risks losing people who prefer detail and clarity.',
+      apply: {
+        resistance: 'Co-create the vision: run a short workshop to translate the “why” into 2–3 practical benefits staff helped define.',
+        peer: 'Acknowledge the shift and share a clear 90-day vision; invite peers to own parts of it to build credibility.',
+        delegation: 'Delegate “how” decisions with guardrails linked to outcomes; review progress at agreed checkpoints.',
+        morale: 'Connect daily tasks back to the bigger purpose; celebrate stories that show progress toward the vision.'
+      }
+    },
+    {
+      key:'organiser', name:'Organiser', icon:'📋', range:[6,7,8,9,10],
       strengths:'Brings structure, clarity and process; ensures change is practical and sustainable.',
-      blind:'May get bogged down in detail; can be seen as rigid or resistant to ambiguity.' },
-    { key:'motivator', name:'Motivator', icon:'🔥', range:[11,12,13,14,15],
+      blind:'May get bogged down in detail; can be seen as rigid or resistant to ambiguity.',
+      apply: {
+        resistance: 'Map the workflow with staff and remove 1–2 pain points they choose; publish a simple checklist they helped write.',
+        peer: 'Set clear roles/ways-of-working with ex-peers; invite feedback on the plan and adjust visibly.',
+        delegation: 'Delegate tasks with a short RACI and definition of done; move from “tell” to “ask” in stand-ups.',
+        morale: 'Time-box planning and deliver quick wins; show a visible roadmap so people know what’s coming.'
+      }
+    },
+    {
+      key:'motivator', name:'Motivator', icon:'🔥', range:[11,12,13,14,15],
       strengths:'Builds enthusiasm; encourages collaboration; celebrates progress; supports morale.',
-      blind:'May prioritise energy over substance; risk burnout if the pace is too fast.' },
-    { key:'stabiliser', name:'Stabiliser', icon:'⚖️', range:[16,17,18,19,20],
+      blind:'May prioritise energy over substance; risk burnout if the pace is too fast.',
+      apply: {
+        resistance: 'Listen for concerns and reflect them back; pair skeptics with early adopters for peer-led demos.',
+        peer: 'Share credit generously; ask former peers to lead showcase moments tied to concrete outcomes.',
+        delegation: 'Delegate ownership with clear success metrics; balance urgency with realistic pacing.',
+        morale: 'Institutionalise “small-win Fridays” and shout-outs; rotate facilitators to spread energy sustainably.'
+      }
+    },
+    {
+      key:'stabiliser', name:'Stabiliser', icon:'⚖️', range:[16,17,18,19,20],
       strengths:'Provides calm, continuity and reassurance; helps teams feel safe during change.',
-      blind:'May cling too tightly to the past; risk slowing progress or avoiding bold steps.' }
+      blind:'May cling too tightly to the past; risk slowing progress or avoiding bold steps.',
+      apply: {
+        resistance: 'Frame the change as continuity-plus: what stays the same, what improves, and the support available.',
+        peer: 'Set steady norms and offer 1:1s; use data and patient impact to justify decisions calmly.',
+        delegation: 'Delegate routine work to create capacity; keep safety nets (checkpoints, buddying) without micromanaging.',
+        morale: 'Protect recovery time and smooth the pace; normalise talking about load and re-prioritise openly.'
+      }
+    }
   ];
 
-  // Helpers
+  // -------- Navigation / Progress --------
   function showPage(index) {
     PAGES.forEach(p => document.getElementById(`page-${p}`)?.classList.add('hidden'));
     document.getElementById(`page-${PAGES[index]}`)?.classList.remove('hidden');
@@ -465,27 +510,24 @@
 
     if (PAGES[index] === 'results') {
       stepLabel.textContent = 'Results';
-      // Show full bar on results
       fill.style.width = '100%';
       bar.setAttribute('aria-valuenow', '100');
     } else {
-      // Steps: Intro + 4 sections = 5 steps (index 0..4)
-      const denominator = 4; // sections count
-      const clampedIndex = Math.min(index, 4);
-      const pct = Math.round((clampedIndex / denominator) * 100); // 0,25,50,75,100
+      // Intro + 4 sections = 5 steps (indices 0..4)
+      const clamped = Math.min(index, 4);
+      const pct = Math.round((clamped / 4) * 100); // 0,25,50,75,100
       stepLabel.textContent = `Step ${index + 1} of 5`;
       fill.style.width = pct + '%';
       bar.setAttribute('aria-valuenow', String(pct));
     }
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // -------- Quiz helpers --------
   function getAnswerValue(q) {
     const el = document.querySelector(`input[name="q${q}"]:checked`);
     return el ? parseInt(el.value, 10) : 0;
-  }
-
+    }
   function ensureRangeAnswered(start, end) {
     for (let i = start; i <= end; i++) {
       if (!document.querySelector(`input[name="q${i}"]:checked`)) {
@@ -495,44 +537,88 @@
     }
     return true;
   }
-
   function sumForRange(range) {
     return range.reduce((acc, qn) => acc + getAnswerValue(qn), 0);
   }
-
   function calculateScores() {
     return STYLES.map(s => ({
       key: s.key, name: s.name, icon: s.icon,
+      strengths: s.strengths, blind: s.blind, apply: s.apply,
       score: sumForRange(s.range)
     }));
   }
 
-  function renderScorePills(scores) {
+  // -------- Results rendering --------
+  function renderScorePills(matched) {
     const pills = document.getElementById('score-pills');
-    pills.innerHTML = scores.map(s =>
-      `<div class="score-pill">${s.name} ${s.icon}: ${s.score}/25</div>`
-    ).join('');
+    if (matched.length === 0) {
+      pills.innerHTML = `<div class="score-pill">No style exceeded 15/25. Consider retaking or aiming for balance across styles.</div>`;
+      return;
+    }
+    pills.innerHTML = matched
+      .map(s => `<div class="score-pill">${s.name} ${s.icon}: ${s.score}/25</div>`)
+      .join('');
   }
 
-  function renderStyleCards(sorted) {
+  function renderStyleCards(matched) {
     const cards = document.getElementById('style-cards');
-    const byKey = Object.fromEntries(STYLES.map(s => [s.key, s]));
-    cards.innerHTML = sorted.map(s => {
-      const c = byKey[s.key];
-      return `
-        <div class="card">
-          <h3 style="margin:0 0 .25rem 0">${s.name} ${s.icon}</h3>
-          <p style="margin:.25rem 0"><strong>Strengths:</strong> ${c.strengths}</p>
-          <p style="margin:.25rem 0"><strong>Blind Spots:</strong> ${c.blind}</p>
-        </div>`;
-    }).join('');
+    if (matched.length === 0) {
+      cards.innerHTML = '';
+      return;
+    }
+    cards.innerHTML = matched.map(s => `
+      <div class="card">
+        <h3 style="margin:0 0 .5rem 0">${s.name} ${s.icon}</h3>
+        <div class="split">
+          <div class="col">
+            <strong>Strengths</strong>
+            <p style="margin:.25rem 0 0 0">${s.strengths}</p>
+          </div>
+          <div class="col">
+            <strong>Blind Spots</strong>
+            <p style="margin:.25rem 0 0 0">${s.blind}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderApplySection(matched) {
+    const el = document.getElementById('apply-section');
+    if (matched.length === 0) {
+      el.innerHTML = `
+        <h3 style="margin-top:0">Apply your style</h3>
+        <p>None of the styles passed the 15/25 threshold this time. Look at your answers and pick one area to strengthen this month (vision, structure, momentum, or stability). Re-take the quiz after you’ve tried 2–3 actions.</p>
+      `;
+      return;
+    }
+
+    el.innerHTML = `
+      <h3 style="margin-top:0">Apply your style</h3>
+      ${matched.map(s => `
+        <div class="apply-block">
+          <h4 style="margin:.1rem 0 .35rem 0">${s.name} ${s.icon}</h4>
+          <ul style="margin:.25rem 0 .25rem 1rem">
+            <li><strong>Change Resistance:</strong> ${s.apply.resistance}</li>
+            <li><strong>Peer-to-Leader:</strong> ${s.apply.peer}</li>
+            <li><strong>Delegation & Trust:</strong> ${s.apply.delegation}</li>
+            <li><strong>Culture & Morale:</strong> ${s.apply.morale}</li>
+          </ul>
+        </div>
+      `).join('')}
+    `;
   }
 
   function showResults() {
     const scores = calculateScores();
-    const sorted = scores.slice().sort((a,b) => b.score - a.score);
-    renderScorePills(scores);
-    renderStyleCards(sorted);
+    // Only keep styles strictly greater than 15
+    const matched = scores.filter(s => s.score > SHOW_THRESHOLD)
+                          .sort((a,b) => b.score - a.score);
+
+    renderScorePills(matched);
+    renderStyleCards(matched);
+    renderApplySection(matched);
+
     showPage(5); // results
   }
 
